@@ -8,7 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot(process.env.MONGODB_URI),
+    MongooseModule.forRoot("mongodb+srv://azone1:2JUZNWgAAPUk7yEX@soil.dlubpja.mongodb.net/gorin?retryWrites=true&w=majority"),
     HighlightsModule,
   ],
   controllers: [AppController],
