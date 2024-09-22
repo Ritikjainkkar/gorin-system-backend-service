@@ -1,47 +1,41 @@
 import { Injectable } from '@nestjs/common';
-import { Highlights } from './highlights.interface';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Highlight, HighlightDocument } from './highlight.schema';
 
 @Injectable()
-export class highlightsService {
-  private highlights: Highlights[] = [];
-  private idCounter = 1;
+export class HighlightsService {
+  constructor(
+    @InjectModel(Highlight.name) private highlightModel: Model<HighlightDocument>,
+  ) {}
 
-  findAll(): Highlights[] {
-    return this.highlights.sort((a, b) => a.position - b.position);
+  // Create a new highlight
+  async create(text: string, position: number): Promise<Highlight> {
+    const newHighlight = new this.highlightModel({ text, position });
+    return newHighlight.save();
   }
 
-  findOne(id: number): Highlights {
-    return this.highlights.find((Highlights) => Highlights.id === id);
+  // Get all highlights
+  async findAll(): Promise<Highlight[]> {
+    return (await this.highlightModel.find().exec()).sort((a, b) => a.position - b.position);
   }
 
-  create(text: string, position: number): Highlights {
-    const existingHighlight = this.highlights.find(highlight => highlight.position === position);
-  
-    if (existingHighlight) {
-      throw new Error(`Highlight with position ${position} already exists.`);
-    }
-    const newHighlights: Highlights = {
-      id: this.idCounter++,
-      text,
-      position,
-      timestamp: new Date(),
-    };
-  
-    this.highlights.push(newHighlights);
-    return newHighlights;
-  }
-  
-  update(id: number, text: string, position: number): Highlights {
-    const Highlights = this.findOne(id);
-    if (Highlights) {
-      Highlights.text = text;
-      Highlights.position = position;
-      Highlights.timestamp = new Date();
-    }
-    return Highlights;
+  // Get a single highlight by ID
+  async findOne(id: string): Promise<Highlight> {
+    return this.highlightModel.findById(id).exec();
   }
 
-  delete(id: number): void {
-    this.highlights = this.highlights.filter((Highlights) => Highlights.id !== id);
+  // Update a highlight by ID
+  async update(id: string, text: string, position: number): Promise<Highlight> {
+    return this.highlightModel.findByIdAndUpdate(
+      id,
+      { text, position },
+      { new: true },
+    ).exec();
+  }
+
+  // Delete a highlight by ID
+  async delete(id: string): Promise<any> {
+    return this.highlightModel.findByIdAndDelete(id).exec();
   }
 }

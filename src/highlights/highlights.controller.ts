@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
-import { highlightsService } from './highlights.service';
+import { HighlightsService } from './Highlights.service';
 
 @Controller('highlights')
-export class highlightsController {
-  constructor(private readonly highlightsService: highlightsService) {}
+export class HighlightsController {
+  constructor(private readonly highlightsService: HighlightsService) {}
 
   @Get()
   findAll() {
@@ -24,12 +24,12 @@ export class highlightsController {
     @Body('text') text: string,
     @Body('position') position: number,
   ) {
-    return this.highlightsService.update(Number(id), text, position);
+    return this.highlightsService.update(id, text, position);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    this.highlightsService.delete(Number(id));
+    this.highlightsService.delete(id);
     return { message: 'Item deleted successfully' };
   }
 }
