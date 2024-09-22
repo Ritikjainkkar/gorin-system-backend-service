@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Highlight, HighlightSchema } from './item.schema';
-import { HighlightsService } from './item.service';
-import { HighlightsController } from './item.controller';
+import { Highlight, HighlightSchema } from './Highlight.schema';
+import { HighlightsService } from './Highlights.service';
+import { HighlightsController } from './Highlights.controller';
 
 @Module({
   imports: [
