@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
-import { HighlightsService } from './Highlights.service';
+import { HighlightsService } from './Highlight.service';
 
 @Controller('highlights')
 export class HighlightsController {
